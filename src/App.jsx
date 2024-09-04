@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Header } from './components/Header';
+import  { Post }  from './Post';
+import  './Styles.css';
 
-function App() {
-  const [count, setCount] = useState(0)
 
+export function App () {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+     <div>
+      <Header />
+
+      <Post 
+      author = 'Diego Fernandes'
+      content = 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.Vitae voluptates corrupti maiores illo consectetur dolorum porro aspernatur doloremque, dolorem reprehenderit, provident rem unde facere pariatur facilis explicabo culpa deleniti atque?'
+      />
+      <Post
+       author = 'José Pereira Pires'
+       content = 'Olá mundo'
+      />
+      <Post
+       author = 'Kelvin Barroso'
+       content = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquid, sapiente sed, animi rem temporibus deserunt, hic itaque debitis nostrum modi labore reprehenderit maxime aliquam possimus! Eos sapiente aspernatur quis!'
+      />
+     </div>
   )
 }
-
-export default App
