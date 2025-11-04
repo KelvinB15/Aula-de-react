@@ -15,10 +15,35 @@
 
     <script type="text/babel">
       
+      function Alert1(){
+       function handleAlertClick(event) {
+        console.log(event);
+         alert('Evento de click disparado!')}
+
+
+        return (
+          <button type="button" onClick={handleAlertClick}>
+            Clique em mim
+          </button>
+        )
+      }
+
+      function Alert2(){
+        function handleAlertClick(msg) {
+          alert(msg)}
+        return (
+          <button type="button" onClick={function handleAlertClick() {
+            alert('Evento de click disparado!')
+          }}>
+            Clique em mim
+          </button>
+        )
+      }
         function App() {
         return (
-            <main class ="P-3">
-                <h1>Modelo de Aplicação</h1>
+            <main>
+                <h1>Eventos em React</h1>
+                <Alert1 />
             </main>
         )
     }

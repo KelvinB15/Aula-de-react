@@ -14,11 +14,33 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
+
+        function Counter(){
+          const [count, setCount] = React.useState (0);
+
+          // Transforme as ações em função, fazendo assim o return ser mais limpo e simples
+          function handleAdd(){
+            setCount(count + 1);
+          }
+
+          function handleRemove(){
+            setCount(count - 1);
+          }
+
+          return (
+            <div>
+              <h1>Contador: {count} </h1>
+              <button type="button" onClick={handleAdd}>Adicionar</button>
+              <button type="button" onClick={handleRemove}>Remover</button>
+            </div>
+          )
+        }
       
         function App() {
         return (
             <main class ="P-3">
                 <h1>Modelo de Aplicação</h1>
+                <Counter />
             </main>
         )
     }

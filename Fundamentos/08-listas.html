@@ -8,17 +8,31 @@
 <body>
     <div id="root"></div>
 
-    <script scr="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
-      
+        
+        function listNames(){
+          const names = ['Ana', 'Bia', 'Carlos', 'Daniel'];
+
+          // invés de fazer função fora do return, faça dentro
+          // invés de fazer variável para guardar o map, faça direto no return
+          // invés de fazer função, faça index no map
+          return (
+            <ul>
+              {names.map((name, index) => {
+                return <li key={name}>{name}</li>
+              })}
+            </ul>
+          )
+        }
         function App() {
         return (
             <main class ="P-3">
                 <h1>Modelo de Aplicação</h1>
+                {listNames()}
             </main>
         )
     }
