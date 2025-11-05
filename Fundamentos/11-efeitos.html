@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocketseat - React.js - Fundamentos</title>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script scr="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+
+        function Counter(){
+          const [count, setCount] = React.useState (0);
+          const [name, setName] = React.useState ('');
+
+            React.useEffect(() => {
+            console.log(`Componente montado.`);
+
+            return () => {
+              console.log(`Componente desmontado.`);
+            }
+          }, []);
+
+          React.useEffect(() => {
+            if (count === 0) {
+            console.log(`O valor do contador é: ${count}`)};
+          }, [count]);
+
+
+          React.useEffect(() => {
+            console.log(`Contador ou nome atualizados`);
+          }, [count, name])
+        
+
+          // Transforme as ações em função, fazendo assim o return ser mais limpo e simples
+          function handleAdd(){
+            setCount(count + 1);
+          }
+
+          function handleRemove(){
+            setCount(count - 1);
+          }
+           
+          return (
+            <div>
+                <div>
+                   
+                   
+                </div>
+                    <hr/>
+                <div>
+                <label>Nome:</label>
+                <input m change={(e) => setName(e.target.value)}/>
+                </div>
+                <div>
+              <h1>Contador: {count} </h1>
+              <button type="button" onClick={handleAdd}>Adicionar</button>
+              <button type="button" onClick={handleRemove}>Remover</button>
+            </div>
+        </div>
+          )
+        }
+      
+        function App() {
+            const [show, setShow] = React.useState (true)          
+        return (
+            <main class ="P-3">
+                  <h1>Modelo de Aplicação</h1>
+                 <button 
+                        onClick={() => setShow((prev) => !prev)}
+                    >
+                        Mostrar/Ocultar Contador
+                    </button>
+                {show && <Counter />}
+            </main>
+        )
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+    </script>
+
+    
+</body>
+</html>

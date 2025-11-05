@@ -125,3 +125,59 @@ padding: 8px 12px;    /* 8px em cima/baixo e 12px nas laterais */
 | `margin`        | Espaço externo                  | `margin: 20px;`       |
 | `border-radius` | Arredondar bordas               | `border-radius: 8px;` |
 | `gap`           | Espaço entre filhos (flex/grid) | `gap: 10px;`          |
+
+## Função + React
+
+
+ const CalculatorContext = React.createContext();
+       function CalculatorProvider({ children}){
+        const [history, setHistory] = React.useState ([])
+
+        function updateHistory (operation, parsedResult){
+            setHistory((prev) => [...prev, `${operation} = ${parsedResult}`]);
+        }
+        return (
+            <CalculatorContext.Provider value={{ history, updateHistory  }}>
+                {children}
+            </CalculatorContext.Provider>
+        )
+       }
+
+### Mapa Mental 
+🏠 CalculatorProvider
+│
+├── 🗃️ history (lista de contas feitas)
+├── ✍️ updateHistory (função para adicionar contas)
+│
+└── 📡 Provider
+     ├── envia "history" para as crianças
+     ├── envia "updateHistory" também
+     └── contém todas as 👶 children (componentes filhos)
+
+
++---------------------------------------------+
+| 🏠 CalculatorProvider                        |
+|---------------------------------------------|
+| 🗃️ history: ["2 + 2 = 4", "3 + 5 = 8"]      |
+| ✍️ updateHistory(op, result)                |
+|---------------------------------------------|
+| 📡 Provider                                 |
+|   👧 Child1 (usa o histórico)               |
+|   👦 Child2 (adiciona novas contas)         |
++---------------------------------------------+
+
+useState([]) → cria uma caixinha pra guardar o histórico 🗃️
+
+updateHistory() → coloca novas contas dentro da caixinha ✍️
+
+Provider → deixa todo mundo dentro da casinha usar essa caixinha 📡
+
+
+### Tabela Sintaxe
+| Parte                           | O que faz                                 | Exemplo                             |
+| :------------------------------ | :---------------------------------------- | :---------------------------------- |
+| `history.map(...)`              | percorre cada item da lista               | percorre ["2 + 2 = 4", "3 + 5 = 8"] |
+| `(item, index)`                 | pega o valor do item e sua posição        | 1️⃣ item = "2 + 2 = 4", index = 0   |
+| `<Text as="li">...</Text>`      | cria um elemento visual (como `<li>`)     | `<li>2 + 2 = 4</li>`                |
+| `{item}`                        | insere o texto do item dentro do elemento | mostra “2 + 2 = 4”                  |
+| `key={`history-item-${index}`}` | dá uma “identidade única” ao item         | key="history-item-0"                |

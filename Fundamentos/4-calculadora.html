@@ -42,7 +42,7 @@
     <script type="text/babel">
         const textVariants = {
             default: 'text-xl',
-            muted: 'text-xl text-(--text-secodary)',
+            muted: 'text-xl text-(--text-secondary)',
             heading: 'text-2xl',
             blast: 'text-3xl'
         }
@@ -141,7 +141,79 @@
             {input: "=", className: "w-16 h-16 bg-[#7f45e2]"},
         ],
     ]
-       function CalculatorDisplay({operation, result}){
+    
+       
+       
+  function CalculatorProvider({ children}){
+        const [history, setHistory] = React.useState ([])
+        const historyStorageKey = 'history';
+        
+
+        React.useEffect(() => {
+            const savedHistory = localStorage.getItem(historyStorageKey);
+            setHistory(JSON.parse(savedHistory || '[]'));
+        }, []);
+
+        function updateHistory (operation, parsedResult){
+            setHistory((prev) => {
+           const updateHistory = [...prev, `${operation} = ${parsedResult}`]
+
+           localStorage.setItem(historyStorageKey, JSON.stringify(updateHistory));
+           return updateHistory;
+        });
+        }
+        return (
+            <CalculatorContext.Provider value={{ history, updateHistory  }}>
+                {children}
+            </CalculatorContext.Provider>
+        )
+       }
+
+       function useCalculator(){
+        const [operation, setOperation] = React.useState('');
+        const [result, setResult] = React.useState('');
+        const { updateHistory } = React.useContext(CalculatorContext);
+
+        function doOperation(input){
+            if (input === "CE"){
+                setOperation(operation.slice(0, -1));
+                return;
+            }
+
+            if (input === "C"){
+                setOperation('');
+                setResult('');
+                return;
+            }
+
+            if (input === "="){
+                const operationResult = eval(operation.replace(/,/g, '.'))
+                const parsedResult = operationResult.toString().replace(/\./g, ',');
+                setResult(parsedResult);
+                updateHistory(operation, parsedResult);
+                return;
+            }
+
+            if (result){
+                setOperation(isNaN(input) ? `${result}${input}` : input);
+                setResult('');
+                return;
+            }
+
+            if (input === "," && !operation.endsWith(',')){
+                setOperation(`${operation},`)
+                return;
+            }
+            setOperation(`
+            ${operation}${input}`)
+        }
+
+        return { 
+            operation,result, doOperation
+        }
+       }
+
+        function CalculatorDisplay({operation, result}){
         return (
            <div className={`
                     flex flex-col gap-2 px-[1.375rem]
@@ -164,40 +236,11 @@
 
        }
        function Calculator(){
-        const [operation, setOperation] = React.useState('');
-        const [result, setResult] = React.useState('');
+
+        const {operation, result, doOperation} = useCalculator();
 
             function handleInputClick(input){
-                if (input === "CE"){
-                    setOperation(operation.slice(0, -1));
-                    return;
-                }
-
-                if (input === "C"){
-                    setOperation('');
-                    setResult('');
-                    return;
-                }
-
-                if (input === "="){
-                    const operationResult = eval(operation.replace(/,/g, '.'))
-                    const parsedResult = operationResult.toString().replace(/\./g, ',');
-                    setResult(parsedResult);
-                    return;
-                }
-
-                if (result){
-                    setOperation(isNaN(input) ? `${result}${input}` : input);
-                    setResult('');
-                    return;
-                }
-
-                if (input === "," && !operation.endsWith(',')){
-                    setOperation(`${operation},`)
-                    return;
-                }
-                setOperation(`
-                ${operation}${input}`)
+                doOperation (input);
             }
 
         
@@ -229,7 +272,13 @@
             )
         }
 
+         const CalculatorContext = React.createContext();
+     
+
         function OperationHistory(){
+            const { history } = React.useContext(CalculatorContext);
+            // console.log('context' + CalculatorContext );
+            console.log("Histórico atual:", history);
             return (
                 <Card className="py-10 px-8"
                 >
@@ -240,10 +289,21 @@
                     >
                         Histórico de operações
                     </Text>
+
+                    {history.length === 0 && (
+                        <Text 
+                        as ="p" 
+                        variant="muted"
+                        >
+                            Nenhuma operação realizada ainda.
+                        </Text>
+                    )}
                   <ul>
-                    <Text as ="li"> 1 + 1 = 2 </Text>
-                    <Text as ="li"> 1 + 1 + 3 = 5 </Text>
-                    <Text as ="li"> 1 + 1 + 1 = 3 </Text>
+                    {history.map((item, index) => (
+                        <Text as ="li" key={`history-item-${index}`}>
+                            {item}
+                        </Text>
+                    ) )}
                     </ul>
                 </Card>
             )
@@ -251,19 +311,20 @@
         // Função para trazer as função de componentes
         function App(){
             return (
+                
                 <main className={`
                     py-28 px-4
                     flex flex-col sm:flex-row
                     margin: 20px gap-8 justify-center
                     `}>        
-                   <Calculator></Calculator>   
-                   <OperationHistory></OperationHistory>
-                    </main>
+                    <CalculatorProvider>
+                        <Calculator></Calculator>   
+                        <OperationHistory></OperationHistory>
+                    </CalculatorProvider>
+                        </main>
             )
         }
-
         ReactDOM.createRoot(document.getElementById('root')).render(<App />)
     </script>
-
 </body>
 </html>
