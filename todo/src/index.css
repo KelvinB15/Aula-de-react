@@ -14,4 +14,7 @@
   --color-pink-base: #c257a4;
   --color-pink-dark: #884074;
 
+  --font-sans: 'Cairo', sans-serif;;
+  
+  --shadow-sm: 0 4px 8px 0 rgba(54, 23, 45, 0.05);
 }

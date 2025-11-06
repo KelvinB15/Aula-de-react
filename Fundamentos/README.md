@@ -181,3 +181,41 @@ Provider → deixa todo mundo dentro da casinha usar essa caixinha 📡
 | `<Text as="li">...</Text>`      | cria um elemento visual (como `<li>`)     | `<li>2 + 2 = 4</li>`                |
 | `{item}`                        | insere o texto do item dentro do elemento | mostra “2 + 2 = 4”                  |
 | `key={`history-item-${index}`}` | dá uma “identidade única” ao item         | key="history-item-0"                |
+
+### PROPS
+
+🧩 Exemplo com React
+
+function BotaoMagico(props) {
+  return <button {...props} />;
+}
+
+<BotaoMagico cor="azul" tamanho="grande" texto="Clica aqui!" />
+
+O que acontece por dentro é como se o React dissesse:
+“Ok! Vou abrir essa mochila de props e colocar tudo dentro do botão!”
+Então o botão vira algo assim:
+
+<button cor="azul" tamanho="grande" texto="Clica aqui!" />
+
+🎨 Ilustração
+
+Mochila props 🎒
+ ├─ cor: azul
+ ├─ tamanho: grande
+ └─ texto: "Clica aqui!"
+
+Botão recebe ...props ✨
+ → Agora o botão tem tudo isso dentro dele!
+
+ ### Tabela Props
+
+
+| Parte                                           | O que faz                                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `children`                                      | Conteúdo dentro do componente                                                        |
+| `className`                                     | Classe CSS                                                                           |
+| `...props`                                      | Pega **todas as outras props** e as espalha no elemento (como `id`, `onClick`, etc.) |
+| `React.createElement(as, {...props}, children)` | Cria dinamicamente o elemento com as props passadas                                  |
+
+
