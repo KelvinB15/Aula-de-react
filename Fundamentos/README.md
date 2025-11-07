@@ -219,3 +219,109 @@ Botão recebe ...props ✨
 | `React.createElement(as, {...props}, children)` | Cria dinamicamente o elemento com as props passadas                                  |
 
 
+
+### Input CheckBox
+
+const inputCheckboxWrapperVariants = cva(`
+   `inline-flex items-center justify-center`
+    `cursor-pointer` 
+    `relative`
+    `group`
+`)
+
+“Fiquem alinhadinhos e centralizados!” (`inline-flex items-center justify-center`)
+
+“Pode clicar em mim!” (`cursor-pointer`)
+
+“Eu posso ter coisinhas posicionadas dentro de mim.” (`relative`)
+
+“Eu tenho um grupo de amiguinhos!” (`group`)
+
++---------------------+
+|     [ ] Texto aqui  |
++---------------------+
+Esse quadradinho [ ] vai dentro do “wrapper”.
+
+
+
+------------------------------------------------------------------------------------
+
+const inputCheckBoxVariants = cva(`
+    appearance-none peer flex items-center justify-center
+    border-2 border-solid transition overflow-hidden
+    `border-green-base`
+    `hover:border-green-dark hover:bg-green-dark/20`
+    checked:border-green-base 
+    `checked:bg-green-base`
+    `group-hover:checked:border-green-dark` 
+    group-hover:checked:bg-green-dark
+`,
+{
+    variants: {
+        `size:` {
+            `md:` "w-5 h-5 rounded-sm"
+        },
+        `disabled:` {
+            `true:` "pointer-events-none"
+        }
+    },
+    defaultVariants: {
+        size: "md",
+        disabled: false
+    }
+})
+
+“Eu sou uma caixinha com bordas verdes.” (`border-green-base`)
+
+“Se alguém passa o mouse em mim, eu fico um pouquinho mais escura.” (`hover:border-green-dark hover:bg-green-dark/20`)
+
+“Quando eu estou marcada (checked), eu fico toda verde!” (`checked:bg-green-base`)
+
+“Quando o mouse está sobre mim e eu estou marcada, fico ainda mais escurinha.” (`group-hover:checked:bg-green-dark`)
+
+E ela tem tamanhos e modos:
+
+`size: "md"` → Tamanho médio (5x5)
+
+`disabled: true` → Se for verdade, ninguém pode clicar nela.
+
+[ ] [ ] ← borda fica mais escura [✓] ← fica verde
+------------------------------------------------------------------------------------
+
+const inputCheckoxIconVariants = cva(`
+   `absolute top-1/2 left-1 -translate-y-1/2`
+    `hidden` 
+    `peer-checked:block` 
+    `fill-white`
+`,
+{
+    variants: {
+        size: {
+            md: "w-3 h-3"
+        }
+    },
+    defaultVariants: {
+        size: "md"
+    }
+})
+
+“Eu fico exatamente no meio da caixinha.” (`absolute top-1/2 left-1 -translate-y-1/2`)
+
+“Normalmente, eu me escondo…” (`hidden`)
+
+“…mas quando a caixinha é marcada, eu apareço!” (`peer-checked:block`)
+
+“Eu sou branquinho.” (`fill-white`)
+
+
+Antes: [ ]  Depois que marca: [✓]
+
+
+------------------------------------------------------------------------------------
+
+| Parte                          | O que faz                                     | Analogia                              |
+| ------------------------------ | --------------------------------------------- | ------------------------------------- |
+| `inputCheckboxWrapperVariants` | A moldura que segura tudo junto               | Uma caixinha que segura o botão       |
+| `inputCheckBoxVariants`        | A caixinha que muda de cor e pode ser marcada | O botão quadradinho que a gente marca |
+| `inputCheckoxIconVariants`     | O “✓” que aparece quando marcamos             | O tique branco dentro da caixinha     |
+
