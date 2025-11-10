@@ -24,6 +24,7 @@ export default function useTasks() {
 
     React.useEffect(() =>{
         fetchTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasksData]);
 
     return {
