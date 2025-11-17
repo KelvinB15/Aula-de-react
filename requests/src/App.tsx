@@ -1,0 +1,18 @@
+import UserNewForm from "./components/new-user-form"
+import UserInfo from "./components/users-info"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import UsersList from "./components/users-list"
+
+const queryClient = new QueryClient()
+
+function App() {
+  return <QueryClientProvider client={queryClient}>
+    <UserInfo/>
+    <hr />
+    <UserNewForm/>
+    <hr />
+    <UsersList />
+  </QueryClientProvider>
+}
+
+export default App
