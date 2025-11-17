@@ -17,6 +17,7 @@ export default function UserInfo() {
         <ul>
             <li>Nome: {user?.name}</li>
             <li>Username: {user?.id}</li>
+            
         </ul>
     )
 }
