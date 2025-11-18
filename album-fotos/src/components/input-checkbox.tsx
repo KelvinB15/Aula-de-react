@@ -1,7 +1,6 @@
 import Icon from "./icon";
 import CheckIcon from "../assets/icons/check.svg?react"
 import { type VariantProps, tv } from "tailwind-variants";
-import { inputTextWrapperVariants } from "./input-text";
 
 export const InputCheckboxWrapperVariants = tv({
     base: `
@@ -21,12 +20,12 @@ export const InputCheckboxVariants = tv({
             border-border-primary hover:border-border-active
             checked:border-accent-brand checked:bg-accent-brand
             group-hover:checked:border-accent-brand-ligth
-            group-hover:checked;bg-accent-brand-light
+            group-hover:checked:bg-accent-brand-light
            ` 
         },
         size: {
             sm: "w-3 h-3 rounded-sm",
-            md: "w-5 h-5 rounded-sm"
+            md: "w-5 h-5 rounded-sm",
         },
         disabled: {
             true: "pointer-events-none"
@@ -48,11 +47,11 @@ export const InputCheckboxIconVariants = tv({
     variants: {
         size: {
             sm: "w-3 h-3 left-px",
-            md: "w-4 h-4 left-0.5"
-        }
+            md: "w-4 h-4 left-0.5",
+        },
     },
     defaultVariants: {
-        size: "md"
+        size: "md",
     }
 })
 
@@ -68,14 +67,16 @@ export default function InputCheckbox({
     ...props
 }: InputCheckboxProps) {
     return (
-    <label className={inputTextWrapperVariants({className})}>
-        <input type="checkbox" className={InputCheckboxVariants({
+    <label className={InputCheckboxWrapperVariants({className})}>
+        <input 
+        type="checkbox" 
+        className={InputCheckboxVariants({
             variant,
             size,
             disabled
         })} {...props}/>
         <Icon svg={CheckIcon}
-            className={InputCheckboxVariants({size})}
+            className={InputCheckboxIconVariants({size})}
         />
     </label>
     )
