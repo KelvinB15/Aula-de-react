@@ -2,6 +2,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, fetcher } from "../../../helpers/api";
 import type { Photo } from "../models/photo";
 import type { PhotoNewFormSchema } from "../schemas";
+import {toast} from "sonner"
+import usePhotoAlbums from "./use-photo-albums";
+import { useNavigate } from "react-router";
 
 interface PhotoDetailResponse extends Photo {
     nextPhotoId?: string
@@ -9,6 +12,7 @@ interface PhotoDetailResponse extends Photo {
 }
 
 export default function usePhoto(id?: string) {
+    const navigate = useNavigate()
     const {data, isLoading} = useQuery<PhotoDetailResponse>({
         queryKey: ["photo", id],
         queryFn: () => fetcher(`/photos/${id}`),
@@ -16,6 +20,7 @@ export default function usePhoto(id?: string) {
     })
 
      const queryClient = useQueryClient()
+     const {managePhotoOnAlbum} = usePhotoAlbums()
 
     async function createPhoto(payload: PhotoNewFormSchema) {
         // eslint-disable-next-line no-useless-catch
@@ -35,16 +40,31 @@ export default function usePhoto(id?: string) {
             }
     )
     if (payload.albumsIds && payload.albumsIds.length > 0) {
-        await api.put(`/photos/${photo.id}/albums`, {
-            albumsIds: payload.albumsIds
-        })
+        await managePhotoOnAlbum(photo.id, payload.albumsIds)
     }
 
         queryClient.invalidateQueries({queryKey: ["photos"]})
+
+        toast.success("Foto criada com sucesso")
         } catch (error) {
+            toast.error("Erro ao criar foto")
             throw error
         }
         
+    }
+
+    async function deletePhoto(photoId:string) {
+        try {
+            await api.delete(`/photos/${photoId}`)
+            navigate("/")
+
+            toast.success("Foto excluida com sucesso")
+
+            navigate("/")
+        } catch (error) {
+            toast.error("Erro ao excluir foto")
+            throw error
+        }
     }
 
     return {
@@ -53,5 +73,6 @@ export default function usePhoto(id?: string) {
         previousPhotoId: data?.previousPhotoId,
         isLoadingPhoto: isLoading,
         createPhoto,
+        deletePhoto,
     }
 }

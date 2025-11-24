@@ -7,26 +7,65 @@ import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.s
 import Skeleton from "../../../components/skeleton";
 import PhotoImageSelectable from "../../photos/components/photo-image-selectable";
 import usePhotos from "../../photos/hooks/use-photos";
+import { useForm } from "react-hook-form";
+import { albumNewFormSchema } from "../schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useAlbum from "../hooks/use-album";
 
 interface AlbumNewDialogProps {
     trigger: React.ReactNode;
 }
 
 export default function AlbumNewDialog({trigger}: AlbumNewDialogProps) {
+    const [modalOpen, setModalOpen] = React.useState(false)
+    const form = useForm<albumNewFormSchema>({
+        resolver: zodResolver(albumNewFormSchema) 
+    })
     const {photos, isLoadingPhotos} = usePhotos()
+    const {createAlbum} = useAlbum()
+    const [isCreatingAlbum, setIsCreatingAlbum] = React.useTransition()
+    
+    React.useEffect(() => {
+        if (!modalOpen) {
+            form.reset()
+        }
+    }, [modalOpen, form])
+
     // para teste, utilizar com api
 
     function handleTogglePhoto(selected: boolean, photoId: string) {
-        console.log(selected, photoId)
+        const photosIds = form.getValues("photosIds") || []
+        let newValue = []
+
+        if (selected) {
+          newValue = [...photosIds, photoId]
+        } else {
+            newValue= photosIds.filter((id) => id !== photoId)
+        }
+
+        form.setValue("photosIds", newValue)
     }
 
-    return (<Dialog>
+    function handleSubmit(payload: albumNewFormSchema) {
+        setIsCreatingAlbum(async () => {
+            await createAlbum(payload)
+            setModalOpen(false)
+        })
+    }
+
+    return (
+    <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogTrigger asChild>{trigger}</DialogTrigger>
         <DialogContent>
+            <form onSubmit={form.handleSubmit(handleSubmit)}>
             <DialogHeader>Criar album</DialogHeader>
 
             <DialogBody className="flex flex-col gap-5">
-                <InputText placeholder="Adicione um título"/>
+                <InputText 
+                    placeholder="Adicione um título"
+                    error={form.formState.errors.title?.message}
+                    {...form.register("title")}
+                />
 
                 <div className="space-y-3">
                     <Text as="div"variant="label-small">Fotos cadastradas</Text>
@@ -70,11 +109,22 @@ export default function AlbumNewDialog({trigger}: AlbumNewDialogProps) {
 
             <DialogFooter>
                 <DialogClose asChild>
-                    <Button variant="secondary">Cancelar</Button>
+                    <Button 
+                        variant="secondary" 
+                        disabled={isCreatingAlbum}
+                    >
+                        Cancelar
+                    </Button>
                 </DialogClose>
 
-                <Button>Criar</Button>
+                <Button 
+                    type="submit" 
+                    disabled={isCreatingAlbum}
+                    handling={isCreatingAlbum}
+                    >
+                        {isCreatingAlbum ? "Criando..." : "Criar"}</Button>
             </DialogFooter>
+            </form>
         </DialogContent>
     </Dialog>
     )
